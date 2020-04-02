@@ -31,6 +31,11 @@ function validateUser(user){
     })
     return schema.validate(user);
 }
+function getToken(){
+
+}
+
 
 exports.User = User;
 exports.validate = validateUser;
+exports.getToken = getToken

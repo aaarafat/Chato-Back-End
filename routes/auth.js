@@ -17,7 +17,6 @@ router.post('/',async (req,res)=>{
      if(!valid)
         return res.status(400).send("Invalid Email or Password");
     const private = await fs.readFileSync(__dirname + '/../config/private.key','utf8')
-    console.log(private);
     res.send(jwt.sign({_id:user._id},private));
 })
 
