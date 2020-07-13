@@ -11,13 +11,13 @@ async function  authenticate (req,res,next){
         next();
     }
     catch{
-        return res.status(400).send('Access Denied Invalid Token');
+        return res.status(401).send('Access Denied Invalid Token');
     }
 }
 
 async function authorize(req,res,next) {
     if(!req.user.isAdmin)
-        return res.status(401).send('Access Denied Not Authorized');
+        return res.status(403).send('Access Denied Not Authorized');
     next();
 
 }
