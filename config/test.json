@@ -1,0 +1,9 @@
+{
+  "JWT_KEY": "1234",
+  "JWT_EXPIRES_IN": "30s",
+  "db": "mongodb://localhost:27017/chato_test",
+  "PORT": "3000",
+  "NODE_ENV": "test",
+  "SENDGRID_API_KEY": "SG.1",
+  "LOGO_URL": "1"
+}
