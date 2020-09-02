@@ -15,3 +15,7 @@ exports.createUser = async (user) => {
   await userDoc.save();
   return _.pick(userDoc, ['_id', 'name', 'email']);
 };
+
+exports.getAllUsers = async () => {
+  return await User.find();
+};

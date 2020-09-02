@@ -23,6 +23,7 @@ const User = mongoose.model(
       required: true,
       minlength: 8,
       maxlength: 1024,
+      select: false
     },
     isAdmin: Boolean,
   })

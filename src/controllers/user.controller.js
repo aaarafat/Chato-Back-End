@@ -3,8 +3,8 @@ const AppError = require('../utils/AppError');
 const _ = require('lodash');
 
 exports.getAllUsers = async (req, res) => {
-  const users = await User.find();
-  res.send(users);
+  const users = await userService.getAllUsers();
+  res.send({users});
 };
 
 exports.registerUser = async (req, res) => {
@@ -19,7 +19,7 @@ exports.registerUser = async (req, res) => {
     _id: user._id,
     isAdmin: user.isAdmin,
   };
-  
+
   const token = await authService.generateToken(tokenPayload);
   // send user and token
   res.send({
