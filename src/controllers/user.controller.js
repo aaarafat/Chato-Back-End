@@ -1,5 +1,6 @@
 const { userService } = require('../services');
 const AppError = require('../utils/AppError');
+const _ = require('lodash');
 
 exports.getAllUsers = async (req, res) => {
   const users = await User.find();

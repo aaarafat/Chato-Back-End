@@ -25,5 +25,5 @@ exports.generateToken = async (payload) => {
 
 exports.hashPassword = async (password) => {
   const salt = await bcrypt.genSalt(10);
-  return await bcrypt.hash(user.password, salt);
+  return await bcrypt.hash(password, salt);
 };

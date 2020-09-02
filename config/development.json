@@ -4,5 +4,4 @@
   "SENDGRID_API_KEY": "SG.1",
   "NODE_ENV": "development",
   "db": "mongodb://localhost:27017/chato",
-  "PORT": "3000"
-}
+  "PORT": "3001"

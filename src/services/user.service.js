@@ -1,6 +1,4 @@
 const { User } = require('../models');
-const jwt = require('jsonwebtoken');
-const bcrypt = require('bcrypt');
 const _ = require('lodash');
 const authService = require('./auth.service');
 
@@ -14,6 +12,6 @@ exports.createUser = async (user) => {
     isAdmin: false,
   });
   userDoc.password = await authService.hashPassword(user.password);
-  userDoc = await user.save();
+  await userDoc.save();
   return _.pick(userDoc, ['_id', 'name', 'email']);
 };
