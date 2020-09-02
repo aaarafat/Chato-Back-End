@@ -19,4 +19,11 @@ router
     catchAsync(userController.registerUser)
   );
 
+router
+  .route('/:id')
+  .get(
+    validate(userValidation.getUserById),
+    catchAsync(userController.getUserById)
+  );
+
 module.exports = router;

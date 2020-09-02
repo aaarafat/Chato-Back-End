@@ -19,3 +19,19 @@ exports.createUser = async (user) => {
 exports.getAllUsers = async () => {
   return await User.find();
 };
+
+/**
+ * Get user by `id`
+ * 
+ * @function
+ * @public
+ * @async
+ * @author Abdelrahman Tarek
+ * @param {String} userId - User ID
+ * @summary Get user by `id`
+ * @returns {Document} `user` if user is found
+ * @returns {null} `null` if user is not found
+ */
+exports.getUserById = async (userId) => {
+  return await User.findById(userId);
+};

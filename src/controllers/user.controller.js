@@ -27,3 +27,14 @@ exports.registerUser = async (req, res) => {
     'token': token
   });
 };
+
+
+exports.getUserById = async (req, res) => {
+  const id = req.params.id;
+  // get user
+  let user = await userService.getUserById(id);
+  // if user = null then user is not found
+  if (!user) return res.status(404).send('user is not found');
+
+  res.send({user});
+};
