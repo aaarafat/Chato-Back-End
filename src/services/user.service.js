@@ -3,7 +3,7 @@ const _ = require('lodash');
 const authService = require('./auth.service');
 
 exports.getUserByEmail = async (email) => {
-  return await User.findOne({ email });
+  return await User.findOne({ email }).select('+password');
 };
 
 exports.createUser = async (user) => {
