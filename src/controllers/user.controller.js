@@ -1,4 +1,4 @@
-const { userService } = require('../services');
+const { userService, authService } = require('../services');
 const AppError = require('../utils/AppError');
 const _ = require('lodash');
 
@@ -12,6 +12,18 @@ exports.registerUser = async (req, res) => {
   if (user) return res.status(400).send('This email is already registered ');
 
   user = _.pick(req.body, ['name', 'email', 'password']);
-  user = userService.createUser(user);
-  res.send(_.pick(user, ['_id', 'name', 'email']));
+  user = await userService.createUser(user);
+
+  // generate token
+  const tokenPayload = {
+    _id: user._id,
+    isAdmin: user.isAdmin,
+  };
+  
+  const token = await authService.generateToken(tokenPayload);
+  // send user and token
+  res.send({
+    'user': _.pick(user, ['_id', 'name', 'email']),
+    'token': token
+  });
 };

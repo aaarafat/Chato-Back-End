@@ -5,3 +5,4 @@
   "NODE_ENV": "development",
   "db": "mongodb://localhost:27017/chato",
   "PORT": "3001"
+}
