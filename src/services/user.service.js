@@ -35,3 +35,23 @@ exports.getAllUsers = async () => {
 exports.getUserById = async (userId) => {
   return await User.findById(userId);
 };
+
+
+/**
+ * Get users by `name`
+ * 
+ * @function
+ * @public
+ * @async
+ * @author Abdelrahman Tarek
+ * @param {String} name - User name
+ * @param {Number} limit
+ * @param {Number} offset
+ * @summary Get user by `name`
+ * @returns {Array<Document>} `users`
+ */
+exports.getUsersByName = async (name, limit, offset) => {
+  return await User.find({
+    "name": { "$regex": name, "$options": "i" }
+  }).limit(limit).skip(offset);
+};

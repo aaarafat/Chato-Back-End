@@ -2,31 +2,35 @@ const Joi = require('@hapi/joi');
 const mongoose = require('mongoose');
 const express = require('express');
 
+const userSchema = new mongoose.Schema({
+  name: {
+    type: String,
+    required: true,
+    minlength: 5,
+    maxlength: 50,
+    index: true
+  },
+  email: {
+    type: String,
+    required: true,
+    minlength: 6,
+    maxlength: 255,
+    unique: true,
+  },
+  password: {
+    type: String,
+    required: true,
+    minlength: 8,
+    maxlength: 1024,
+    select: false
+  },
+  isAdmin: Boolean,
+});
+
 const User = mongoose.model(
   'User',
-  new mongoose.Schema({
-    name: {
-      type: String,
-      required: true,
-      minlength: 5,
-      maxlength: 50,
-    },
-    email: {
-      type: String,
-      required: true,
-      minlength: 6,
-      maxlength: 255,
-      unique: true,
-    },
-    password: {
-      type: String,
-      required: true,
-      minlength: 8,
-      maxlength: 1024,
-      select: false
-    },
-    isAdmin: Boolean,
-  })
+  userSchema
 );
+
 
 exports.User = User;
