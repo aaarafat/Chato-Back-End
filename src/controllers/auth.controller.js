@@ -20,7 +20,7 @@ exports.loginUser = async (req, res) => {
 
   const token = await authService.generateToken(tokenPayload);
   // send user and token
-  res.send({
+  res.status(200).json({
     'user': _.pick(user, ['_id', 'name', 'email']),
     'token': token
   });

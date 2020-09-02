@@ -4,7 +4,7 @@ const _ = require('lodash');
 
 exports.getAllUsers = async (req, res) => {
   const users = await userService.getAllUsers();
-  res.send({users});
+  res.status(200).json({ users });
 };
 
 exports.registerUser = async (req, res) => {
@@ -22,7 +22,7 @@ exports.registerUser = async (req, res) => {
 
   const token = await authService.generateToken(tokenPayload);
   // send user and token
-  res.send({
+  res.status(200).json({
     'user': _.pick(user, ['_id', 'name', 'email']),
     'token': token
   });
@@ -36,5 +36,5 @@ exports.getUserById = async (req, res) => {
   // if user = null then user is not found
   if (!user) return res.status(404).send('user is not found');
 
-  res.send({user});
+  res.status(200).json({ user });
 };
