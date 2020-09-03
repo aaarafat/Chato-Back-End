@@ -8,6 +8,11 @@ const { authService } = require('../../services');
 
 const router = express.Router();
 
+const friendshipRouter = require('./friendship.route');
+
+// users/:id/friends
+router.use('/:id/friends', friendshipRouter);
+
 router
   .route('/')
   .get(
