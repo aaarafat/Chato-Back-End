@@ -46,6 +46,7 @@ exports.changePassword = async (req, res) => {
   const { password, oldPassword } = req.body;
 
   let user = await userService.getUserById(req.user._id, { password: true });
+
   if (!user) return res.status(404).json({ status: 404, message: 'user is not found' });
 
   const valid = await authService.verifyPassword(
