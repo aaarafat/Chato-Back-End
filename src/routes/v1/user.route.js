@@ -4,6 +4,7 @@ const validate = require('../../middlewares/validate');
 const { userValidation } = require('../../validations/');
 const { userController } = require('../../controllers');
 const catchAsync = require('../../utils/catchAsync');
+const { authService } = require('../../services');
 
 const router = express.Router();
 
@@ -24,6 +25,14 @@ router
   .get(
     validate(userValidation.getUserById),
     catchAsync(userController.getUserById)
+  );
+
+router
+  .route('/password')
+  .patch(
+    catchAsync(auth.authenticate),
+    validate(userValidation.changePassword),
+    catchAsync(userController.changePassword)
   );
 
 module.exports = router;

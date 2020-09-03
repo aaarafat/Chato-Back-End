@@ -28,12 +28,13 @@ exports.getAllUsers = async () => {
  * @async
  * @author Abdelrahman Tarek
  * @param {String} userId - User ID
+ * @param {Boolean} [ops.password] if true will select password (Default `false`)
  * @summary Get user by `id`
  * @returns {Document} `user` if user is found
  * @returns {null} `null` if user is not found
  */
-exports.getUserById = async (userId) => {
-  return await User.findById(userId);
+exports.getUserById = async (userId, ops = { password: false }) => {
+  return await User.findById(userId).select({ password: ops.password });
 };
 
 
@@ -54,4 +55,25 @@ exports.getUsersByName = async (name, limit, offset) => {
   return await User.find({
     "name": { "$regex": name, "$options": "i" }
   }).limit(limit).skip(offset);
+};
+
+
+
+/**
+ * Change user password
+ * 
+ * @function
+ * @public
+ * @async
+ * @author Abdelrahman Tarek
+ * @param {String} name - User name
+ * @param {Number} limit
+ * @param {Number} offset
+ * @summary Change user password
+ * @returns {Document} `user`
+ */
+exports.changePassword = async (user, newPassword) => {
+  user.password = await authService.hashPassword(newPassword);
+  await user.save();
+  return user;
 };

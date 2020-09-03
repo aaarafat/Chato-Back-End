@@ -4,13 +4,13 @@ const _ = require('lodash');
 
 exports.loginUser = async (req, res) => {
   const user = await userService.getUserByEmail(req.body.email);
-  if (!user) return res.status(400).send('Invalid Email or Password');
+  if (!user) return res.status(400).json({ status: 400, message: 'Invalid Email or Password' });
 
   const valid = await authService.verifyPassword(
     req.body.password,
     user.password
   );
-  if (!valid) return res.status(400).send('Invalid Email or Password');
+  if (!valid) return res.status(400).json({ status: 400, message: 'Invalid Email or Password' });
 
   // generate token
   const tokenPayload = {
