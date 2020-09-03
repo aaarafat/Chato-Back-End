@@ -24,6 +24,11 @@ const userSchema = new mongoose.Schema({
     maxlength: 1024,
     select: false
   },
+  friends: [{
+    type: mongoose.Types.ObjectId,
+    ref: 'User',
+    unique: true
+  }],
   isAdmin: Boolean,
 });
 
