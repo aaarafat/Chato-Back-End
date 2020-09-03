@@ -34,7 +34,10 @@ exports.getAllUsers = async () => {
  * @returns {null} `null` if user is not found
  */
 exports.getUserById = async (userId, ops = { password: false }) => {
-  return await User.findById(userId).select({ password: ops.password, name: 1, email: 1 });
+  if (ops.password)
+    return await User.findById(userId).select('+password');
+  else
+    return await User.findById(userId);
 };
 
 
