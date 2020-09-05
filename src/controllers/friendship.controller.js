@@ -10,12 +10,7 @@ exports.sendFriendRequest = async (req, res) => {
     if (to in req.user.friends) return res.status(400).json({ status: 400, message: 'You already friends' });
 
     // send request
-    try {
-        await friendshipService.sendFriendRequest(to, req.user._id);
-    } catch (err) {
-        // already sent a request
-        return res.status(400).json({ status: 400, message: 'You already sent a request' });
-    }
+    await friendshipService.sendFriendRequest(to, req.user._id);
 
     res.status(200).send();
 };

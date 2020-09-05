@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 const app = require('./app');
 const config = require('config');
 const logger = require('./config/logger');
+const socketIo = require('./config/socket');
 
 let server;
 const port = config.get('PORT') || 3000;
@@ -18,6 +19,8 @@ mongoose
     server = app.listen(port, () => {
       logger.info(`Listening to port ${port}`);
     });
+
+    socketIo.server(server);
   })
   .catch((err) => {
     logger.error('Error: ', err);
