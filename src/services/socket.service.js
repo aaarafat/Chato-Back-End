@@ -1,5 +1,6 @@
 const logger = require('../config/logger');
 let activeSockets = {};
+let activeUsers = {};
 
 
 exports.notifyFriendRequest = (to, request) => {
@@ -12,7 +13,9 @@ exports.notifyFriendRequest = (to, request) => {
 
 exports.handleConnection = (socket) => {
     logger.info(`Hello socket ${socket.id}...`);
+
     activeSockets[socket.id] = socket;
+    activeUsers[socket.user._id] = socket.id;
 };
 
 exports.handleDisconnection = (socket) => {
