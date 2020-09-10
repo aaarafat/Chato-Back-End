@@ -14,3 +14,15 @@ exports.sendFriendRequest = async (req, res) => {
 
     res.status(200).send();
 };
+
+exports.getFriendRequests = async (req, res) => {
+    const user = req.user;
+    const { limit, offset } = req.query;
+
+    const requests = await friendshipService.getFriendRequests(user._id, limit, offset);
+
+    res.status(200).json({
+        status: 200,
+        requests
+    });
+};

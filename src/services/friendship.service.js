@@ -40,3 +40,23 @@ exports.sendFriendRequest = async (to, from) => {
     // notify user
     socketService.notifyFriendRequest(to, request);
 };
+
+/**
+ * Get Pending friend requests
+ * 
+ * @author Abdelrahman Tarek
+ * 
+ * @param {String} userId User ID 
+ * @param {Number} limit
+ * @param {Number} offset
+ * @returns {Array<Document>} Requests
+ */
+exports.getFriendRequests = async (userId, limit, offset) => {
+    const requests = await FriendRequest.find({ to: userId, status: 1 })
+        .select('-to')
+        .limit(limit)
+        .skip(offset)
+        .populate('from', '-friends -isAdmin');
+
+    return requests;
+}
