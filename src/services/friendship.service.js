@@ -20,18 +20,12 @@ exports.sendFriendRequest = async (to, from) => {
 
     // request is found
     if (request) {
-        switch (request.status) {
-            case 1: // pending
-                throw new AppError()
-                break;
-            case 2: // accepted
-
-                break;
-            case 3: // rejected
-
-                break;
-            default:
-                break;
+        if (request.status === 1) { // pending
+            throw new AppError('Cannot send a friend request', 400);
+        } else if (request.status === 2) {
+            throw new AppError('You already friends', 400);
+        } else if (request.status === 3) {
+            await FriendRequest.deleteOne(request._id);
         }
     }
 
