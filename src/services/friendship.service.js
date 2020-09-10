@@ -1,4 +1,5 @@
-const { FriendRequest, User } = require('../models');
+const { FriendRequest } = require('../models');
+const socketService = require('../services/socket.service');
 const AppError = require('../utils/AppError');
 
 /**
@@ -15,7 +16,7 @@ const AppError = require('../utils/AppError');
  */
 exports.sendFriendRequest = async (to, from) => {
     // check if you sent a request
-    const request = await FriendRequest.findOne({ to: { $in: [to, from] }, from: { $in: [to, from] } });
+    let request = await FriendRequest.findOne({ to: { $in: [to, from] }, from: { $in: [to, from] } });
     // sconsole.log(request);
 
     // request is found
@@ -30,11 +31,12 @@ exports.sendFriendRequest = async (to, from) => {
     }
 
     // create FriendRequest document
-    return await FriendRequest.create({
+    request = await FriendRequest.create({
         to,
         from,
         status: 1 // requested status
     });
     // TODO
     // notify user
+    socketService.notifyFriendRequest(to, request);
 };

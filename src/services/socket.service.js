@@ -1,21 +1,39 @@
 const logger = require('../config/logger');
 let activeSockets = {};
-let activeUsers = {};
+let userSocket = {};
 
 
-exports.notifyFriendRequest = (to, request) => {
+/**
+ * Notify user if request is sent
+ * 
+ * @author Abdelrahman Tarek
+ * 
+ * @param {String} userId Reciever user ID
+ * @param {Object} request Request object
+ * @returns {Boolean} `True` if user is notified "active user" else `False`
+ */
+exports.notifyFriendRequest = (userId, request) => {
+    const socket = activeSockets[userSocket[userId]];
+
+    if (!socket) return false;
+
     socket.emit('friendRequest', {
-        id: request._id,
-        _id: request._id,
-        from: request.from
+        request: {
+            id: request._id,
+            _id: request._id,
+            from: request.from,
+            status: request.status
+        }
     });
+
+    return true;
 };
 
 exports.handleConnection = (socket) => {
     logger.info(`Hello socket ${socket.id}...`);
 
     activeSockets[socket.id] = socket;
-    activeUsers[socket.user._id] = socket.id;
+    userSocket[socket.user._id] = socket.id;
 };
 
 exports.handleDisconnection = (socket) => {
