@@ -1,45 +1,45 @@
 const logger = require('../config/logger');
-let activeSockets = {};
-let userSocket = {};
+const activeSockets = {};
+const userSocket = {};
 
 
 /**
  * Notify user if request is sent
- * 
+ *
  * @author Abdelrahman Tarek
- * 
+ *
  * @param {String} userId Reciever user ID
  * @param {Object} request Request object
- * @returns {Boolean} `True` if user is notified "active user" else `False`
+ * @return {Boolean} `True` if user is notified "active user" else `False`
  */
 exports.notifyFriendRequest = (userId, request) => {
-    const socket = activeSockets[userSocket[userId]];
+  const socket = activeSockets[userSocket[userId]];
 
-    if (!socket) return false;
+  if (!socket) return false;
 
-    socket.emit('friendRequest', {
-        request: {
-            id: request._id,
-            _id: request._id,
-            from: request.from,
-            status: request.status
-        }
-    });
+  socket.emit('friendRequest', {
+    request: {
+      id: request._id,
+      _id: request._id,
+      from: request.from,
+      status: request.status,
+    },
+  });
 
-    return true;
+  return true;
 };
 
 exports.handleConnection = (socket) => {
-    logger.info(`Hello socket ${socket.id}...`);
+  logger.info(`Hello socket ${socket.id}...`);
 
-    activeSockets[socket.id] = socket;
-    userSocket[socket.user._id] = socket.id;
+  activeSockets[socket.id] = socket;
+  userSocket[socket.user._id] = socket.id;
 };
 
 exports.handleDisconnection = (socket) => {
-    socket.on('disconnect', () => {
-        logger.info(`${socket.id} Disconnected ....`);
+  socket.on('disconnect', () => {
+    logger.info(`${socket.id} Disconnected ....`);
 
-        delete activeSockets[socket.id];
-    });
+    delete activeSockets[socket.id];
+  });
 };

@@ -1,10 +1,10 @@
 const winston = require('winston');
 const config = require('config');
-const { Loggly } = require('winston-loggly-bulk');
+const {Loggly} = require('winston-loggly-bulk');
 
 const enumerateErrorFormat = winston.format((info) => {
   if (info instanceof Error) {
-    Object.assign(info, { message: info.stack });
+    Object.assign(info, {message: info.stack});
   }
   return info;
 });
@@ -38,11 +38,11 @@ const logger = winston.createLogger({
   level: nodeEnv === 'development' ? 'debug' : 'info',
   format: winston.format.combine(
     enumerateErrorFormat(),
-    nodeEnv === 'development'
-      ? winston.format.colorize()
-      : winston.format.uncolorize(),
+    nodeEnv === 'development' ?
+      winston.format.colorize() :
+      winston.format.uncolorize(),
     winston.format.splat(),
-    winston.format.printf(({ level, message }) => `${level}: ${message}`)
+    winston.format.printf(({level, message}) => `${level}: ${message}`),
   ),
   transports: transports,
 });

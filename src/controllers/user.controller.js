@@ -1,15 +1,18 @@
-const { userService, authService } = require('../services');
-const AppError = require('../utils/AppError');
+const {userService, authService} = require('../services');
 const _ = require('lodash');
 
 exports.getAllUsers = async (req, res) => {
   const users = await userService.getAllUsers();
-  res.status(200).json({ users });
+  res.status(200).json({users});
 };
 
 exports.registerUser = async (req, res) => {
   let user = await userService.getUserByEmail(req.body.email);
-  if (user) return res.status(400).json({ status: 400, message: 'This email is already registered ' });
+  if (user) {
+    return res.status(400).json({
+      status: 400, message: 'This email is already registered ',
+    });
+  }
 
   user = _.pick(req.body, ['name', 'email', 'password']);
   user = await userService.createUser(user);
@@ -26,7 +29,7 @@ exports.registerUser = async (req, res) => {
 
   res.status(200).json({
     'user': _.pick(user, ['_id', 'name', 'email']),
-    'token': token
+    'token': token,
   });
 };
 
@@ -34,29 +37,41 @@ exports.registerUser = async (req, res) => {
 exports.getUserById = async (req, res) => {
   const id = req.params.id;
   // get user
-  let user = await userService.getUserById(id);
+  const user = await userService.getUserById(id);
   // if user = null then user is not found
-  if (!user) return res.status(404).json({ status: 404, message: 'user is not found' });
+  if (!user) {
+    return res.status(404).json({
+      status: 404, message: 'user is not found',
+    });
+  }
 
-  res.status(200).json({ user });
+  res.status(200).json({user});
 };
 
 
 exports.changePassword = async (req, res) => {
-  const { password, oldPassword } = req.body;
+  const {password, oldPassword} = req.body;
 
-  let user = await userService.getUserById(req.user._id, { password: true });
+  let user = await userService.getUserById(req.user._id, {password: true});
 
-  if (!user) return res.status(404).json({ status: 404, message: 'user is not found' });
+  if (!user) {
+    return res.status(404).json({
+      status: 404, message: 'user is not found',
+    });
+  }
 
   const valid = await authService.verifyPassword(
     oldPassword,
-    user.password
+    user.password,
   );
-  if (!valid) return res.status(400).json({ status: 400, message: 'Invalid Password' });
+  if (!valid) {
+    return res.status(400).json({
+      status: 400, message: 'Invalid Password',
+    });
+  }
 
   // change password
-  user = await userService.changePassword(user, password)
+  user = await userService.changePassword(user, password);
 
   // generate token
   const tokenPayload = {
@@ -70,6 +85,6 @@ exports.changePassword = async (req, res) => {
 
   res.status(200).json({
     'user': _.pick(user, ['_id', 'name', 'email']),
-    'token': token
+    'token': token,
   });
 };

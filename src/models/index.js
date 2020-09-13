@@ -1,7 +1,7 @@
-const { User } = require('./user.model');
-const { FriendRequest } = require('./friendRequest.model');
+const {User} = require('./user.model');
+const {FriendRequest} = require('./friendRequest.model');
 
 module.exports = {
   User,
-  FriendRequest
+  FriendRequest,
 };

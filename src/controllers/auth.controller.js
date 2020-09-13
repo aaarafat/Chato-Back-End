@@ -1,16 +1,25 @@
-const { authService, userService } = require('../services');
-const AppError = require('../utils/AppError');
+const {authService, userService} = require('../services');
 const _ = require('lodash');
 
 exports.loginUser = async (req, res) => {
   const user = await userService.getUserByEmail(req.body.email);
-  if (!user) return res.status(400).json({ status: 400, message: 'Invalid Email or Password' });
+  if (!user) {
+    return res.status(400).json({
+      status: 400,
+      message: 'Invalid Email or Password',
+    });
+  }
 
   const valid = await authService.verifyPassword(
     req.body.password,
-    user.password
+    user.password,
   );
-  if (!valid) return res.status(400).json({ status: 400, message: 'Invalid Email or Password' });
+  if (!valid) {
+    return res.status(400).json({
+      status: 400,
+      message: 'Invalid Email or Password',
+    });
+  }
 
   // generate token
   const tokenPayload = {
@@ -24,6 +33,6 @@ exports.loginUser = async (req, res) => {
 
   res.status(200).json({
     'user': _.pick(user, ['_id', 'name', 'email']),
-    'token': token
+    'token': token,
   });
 };

@@ -6,7 +6,8 @@
   "scripts": {
     "start": "cross-env NODE_ENV=development nodemon ./src/server.js",
     "start-prod": "cross-env NODE_ENV=production node ./src/server.js",
-    "test": "jest --watchAll --verbose --coverage"
+    "test": "jest --watchAll --verbose --coverage",
+    "lint": "eslint ./src/server.js"
   },
   "keywords": [],
   "author": "",
@@ -38,6 +39,8 @@
     "xss-clean": "^0.1.1"
   },
   "devDependencies": {
+    "eslint": "^7.9.0",
+    "eslint-config-google": "^0.14.0",
     "faker": "^5.1.0",
     "jest": "^26.4.2",
     "mockingoose": "^2.13.2",

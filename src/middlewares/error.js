@@ -31,7 +31,7 @@ const handleValidationErrorDB = (err) => {
 };
 
 const errorHandler = (err, req, res, next) => {
-  let { statusCode, message } = err;
+  let {statusCode, message} = err;
   if (config.get('NODE_ENV') === 'production' && !err.isOperational) {
     statusCode = httpStatus.INTERNAL_SERVER_ERROR;
     message = httpStatus[httpStatus.INTERNAL_SERVER_ERROR];

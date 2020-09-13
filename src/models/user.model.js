@@ -1,6 +1,4 @@
-const Joi = require('@hapi/joi');
 const mongoose = require('mongoose');
-const express = require('express');
 
 const userSchema = new mongoose.Schema({
   name: {
@@ -8,7 +6,7 @@ const userSchema = new mongoose.Schema({
     required: true,
     minlength: 5,
     maxlength: 50,
-    index: true
+    index: true,
   },
   email: {
     type: String,
@@ -22,19 +20,19 @@ const userSchema = new mongoose.Schema({
     required: true,
     minlength: 8,
     maxlength: 1024,
-    select: false
+    select: false,
   },
   friends: [{
     type: mongoose.Types.ObjectId,
     ref: 'User',
-    unique: true
+    unique: true,
   }],
   isAdmin: Boolean,
 });
 
 const User = mongoose.model(
   'User',
-  userSchema
+  userSchema,
 );
 
 

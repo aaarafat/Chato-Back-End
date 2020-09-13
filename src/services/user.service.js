@@ -1,13 +1,13 @@
-const { User } = require('../models');
+const {User} = require('../models');
 const _ = require('lodash');
 const authService = require('./auth.service');
 
 exports.getUserByEmail = async (email) => {
-  return await User.findOne({ email }).select('+password');
+  return await User.findOne({email}).select('+password');
 };
 
 exports.createUser = async (user) => {
-  let userDoc = User({
+  const userDoc = new User({
     ...user,
     isAdmin: false,
   });
@@ -22,28 +22,30 @@ exports.getAllUsers = async () => {
 
 /**
  * Get user by `id`
- * 
+ *
  * @function
  * @public
  * @async
  * @author Abdelrahman Tarek
  * @param {String} userId - User ID
- * @param {Boolean} [ops.password] if true will select password (Default `false`)
+ * @param {Object} ops
+ * @param {Boolean} [ops.password] if true will select password(Default `false`)
  * @summary Get user by `id`
- * @returns {Document} `user` if user is found
- * @returns {null} `null` if user is not found
+ * @return {Document} `user` if user is found
+ * @return {null} `null` if user is not found
  */
-exports.getUserById = async (userId, ops = { password: false }) => {
-  if (ops.password)
+exports.getUserById = async (userId, ops = {password: false}) => {
+  if (ops.password) {
     return await User.findById(userId).select('+password');
-  else
+  } else {
     return await User.findById(userId);
+  }
 };
 
 
 /**
  * Get users by `name`
- * 
+ *
  * @function
  * @public
  * @async
@@ -52,28 +54,26 @@ exports.getUserById = async (userId, ops = { password: false }) => {
  * @param {Number} limit
  * @param {Number} offset
  * @summary Get user by `name`
- * @returns {Array<Document>} `users`
+ * @return {Array<Document>} `users`
  */
 exports.getUsersByName = async (name, limit, offset) => {
   return await User.find({
-    "name": { "$regex": name, "$options": "i" }
+    'name': {'$regex': name, '$options': 'i'},
   }).limit(limit).skip(offset);
 };
 
 
-
 /**
  * Change user password
- * 
+ *
  * @function
  * @public
  * @async
  * @author Abdelrahman Tarek
- * @param {String} name - User name
- * @param {Number} limit
- * @param {Number} offset
+ * @param {Document} user user
+ * @param {String} newPassword new password
  * @summary Change user password
- * @returns {Document} `user`
+ * @return {Document} `user`
  */
 exports.changePassword = async (user, newPassword) => {
   user.password = await authService.hashPassword(newPassword);

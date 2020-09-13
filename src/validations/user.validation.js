@@ -1,5 +1,5 @@
 const Joi = require('@hapi/joi');
-const { idCheck } = require('./custom.validation')
+const {idCheck} = require('./custom.validation');
 
 exports.registerUser = {
   body: Joi.object().keys({
@@ -16,14 +16,15 @@ exports.registerUser = {
  * @author Abdelrahman Tarek
  * @summary Schema for a req for getUserById endpoint
  * @namespace
- * @property {object} params An object containing parameter values parsed from the URL path
+ * @property {object} params
+ * An object containing parameter values parsed from the URL path
  * @property {string} params.id Id of the user
  */
 
 exports.getUserById = {
   params: Joi.object().keys({
-    id: Joi.required().custom(idCheck)
-  })
+    id: Joi.required().custom(idCheck),
+  }),
 };
 
 exports.changePassword = {
@@ -32,6 +33,6 @@ exports.changePassword = {
     repeatPassword: Joi.any()
       .equal(Joi.ref('password'))
       .required(),
-    oldPassword: Joi.string().min(8).max(255).required()
-  })
+    oldPassword: Joi.string().min(8).max(255).required(),
+  }),
 };

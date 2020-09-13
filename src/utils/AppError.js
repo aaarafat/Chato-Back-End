@@ -9,8 +9,8 @@ class AppError extends Error {
    * @author Abdelrahman Tarek
    * @param {String} message Error message
    * @param {Number} statusCode Error status code
-   * @param {Boolean} [isOperational=true] `true` if the error is operational (default `true`)
-   * @param {String} [stack] Error stack 
+   * @param {Boolean} [isOperational=true] `true` if the error is operational
+   * @param {String} [stack] Error stack
    */
   constructor(message, statusCode, isOperational = true, stack = '') {
     super(message);
@@ -20,8 +20,7 @@ class AppError extends Error {
     this.isOperational = isOperational;
     if (stack) {
       this.stack = stack;
-    }
-    else {
+    } else {
       Error.captureStackTrace(this, this.constructor);
     }
   }

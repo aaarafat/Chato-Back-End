@@ -1,5 +1,5 @@
-const { required } = require("@hapi/joi");
+const {required} = require('@hapi/joi');
 
 const userMock = require('./user.model.mock');
 
-module.exports = { userMock };
+module.exports = {userMock};
