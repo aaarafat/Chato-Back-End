@@ -35,3 +35,11 @@ exports.getFriendRequests = async (req, res) => {
     requests,
   });
 };
+
+exports.acceptFriendRequest = async (req, res) => {
+  const requestId = req.params.id;
+
+  await friendshipService.acceptFriendRequest(requestId);
+
+  res.status(204).send();
+};

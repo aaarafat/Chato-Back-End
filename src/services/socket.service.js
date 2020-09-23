@@ -22,7 +22,6 @@ exports.notifyFriendRequest = (userId, request) => {
       id: request._id,
       _id: request._id,
       from: request.from,
-      status: request.status,
     },
   });
 

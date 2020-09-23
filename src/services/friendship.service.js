@@ -1,4 +1,4 @@
-const {FriendRequest} = require('../models');
+const {FriendRequest, User} = require('../models');
 const socketService = require('../services/socket.service');
 const AppError = require('../utils/AppError');
 
@@ -22,20 +22,13 @@ exports.sendFriendRequest = async (to, from) => {
 
   // request is found
   if (request) {
-    if (request.status === 1) { // pending
-      throw new AppError('Cannot send a friend request', 400);
-    } else if (request.status === 2) {
-      throw new AppError('You already friends', 400);
-    } else if (request.status === 3) {
-      await FriendRequest.deleteOne(request._id);
-    }
+    throw new AppError('Cannot send a friend request', 400);
   }
 
   // create FriendRequest document
   request = await FriendRequest.create({
     to,
     from,
-    status: 1, // requested status
   });
   // TODO
   // notify user
@@ -53,11 +46,25 @@ exports.sendFriendRequest = async (to, from) => {
  * @return {Array<Document>} Requests
  */
 exports.getFriendRequests = async (userId, limit, offset) => {
-  const requests = await FriendRequest.find({to: userId, status: 1})
+  const requests = await FriendRequest.find({to: userId})
     .select('-to')
     .limit(limit)
     .skip(offset)
     .populate('from', '-friends -isAdmin');
 
   return requests;
+};
+
+
+exports.acceptFriendRequest = async (requestId) => {
+  const request = await FriendRequest.findById(requestId);
+
+  // no request found
+  if (!request) throw new AppError('The Request is not found', 404);
+
+  await Promise.all([
+    User.findByIdAndUpdate(request.to, {$addToSet: {friends: request.from}}),
+    User.findByIdAndUpdate(request.from, {$addToSet: {friends: request.to}}),
+    request.remove(),
+  ]);
 };
