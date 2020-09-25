@@ -32,7 +32,7 @@ exports.loginUser = async (req, res) => {
   res.setHeader('x-auth-token', token);
 
   res.status(200).json({
-    'user': _.pick(user, ['_id', 'name', 'email']),
+    'user': _.pick(user, ['_id', 'name', 'email', 'username', 'profilePic']),
     'token': token,
   });
 };

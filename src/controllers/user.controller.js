@@ -14,7 +14,7 @@ exports.registerUser = async (req, res) => {
     });
   }
 
-  user = _.pick(req.body, ['name', 'email', 'password']);
+  user = _.pick(req.body, ['name', 'email', 'password', 'username']);
   user = await userService.createUser(user);
 
   // generate token
@@ -28,7 +28,7 @@ exports.registerUser = async (req, res) => {
   res.setHeader('x-auth-token', token);
 
   res.status(200).json({
-    'user': _.pick(user, ['_id', 'name', 'email']),
+    'user': _.pick(user, ['_id', 'name', 'email', 'username', 'profilePic']),
     'token': token,
   });
 };
@@ -84,7 +84,7 @@ exports.changePassword = async (req, res) => {
   res.setHeader('x-auth-token', token);
 
   res.status(200).json({
-    'user': _.pick(user, ['_id', 'name', 'email']),
+    'user': _.pick(user, ['_id', 'name', 'email', 'username', 'profilePic']),
     'token': token,
   });
 };
