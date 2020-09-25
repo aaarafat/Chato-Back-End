@@ -14,4 +14,12 @@ router
     catchAsync(friendshipController.acceptFriendRequest),
   );
 
+router
+  .route('/:id/reject')
+  .post(
+    catchAsync(auth.authenticate),
+    validate(friendshipValidation.FriendRequestId),
+    catchAsync(friendshipController.rejectFriendRequest),
+  );
+
 module.exports = router;

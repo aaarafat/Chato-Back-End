@@ -43,3 +43,11 @@ exports.acceptFriendRequest = async (req, res) => {
 
   res.status(204).send();
 };
+
+exports.rejectFriendRequest = async (req, res) => {
+  const requestId = req.params.id;
+
+  await friendshipService.rejectFriendRequest(requestId);
+
+  res.status(204).send();
+};

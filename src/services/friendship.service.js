@@ -68,3 +68,12 @@ exports.acceptFriendRequest = async (requestId) => {
     request.remove(),
   ]);
 };
+
+exports.rejectFriendRequest = async (requestId) => {
+  const request = await FriendRequest.findById(requestId);
+
+  // no request found
+  if (!request) throw new AppError('The Request is not found', 404);
+
+  await request.remove();
+};
