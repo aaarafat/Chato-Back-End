@@ -42,3 +42,15 @@ exports.handleDisconnection = (socket) => {
     delete activeSockets[socket.id];
   });
 };
+
+/**
+ * Return true if user is active
+ *
+ * @author Abdelrahman Tarek
+ * @param {String} userId
+ * @return {Boolean} `true` is user is active
+ */
+exports.isActive = (userId) => {
+  const socket = activeSockets[userSocket[userId]];
+  return (socket) ? true : false;
+};

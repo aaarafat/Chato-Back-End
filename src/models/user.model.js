@@ -35,13 +35,23 @@ const userSchema = new mongoose.Schema({
   friends: [{
     type: mongoose.Types.ObjectId,
     ref: 'User',
-    unique: true,
   }],
   isAdmin: Boolean,
-  isActive: {
-    type: Boolean,
-    default: false,
+}, {
+  timestamps: true,
+  toJSON: {
+    virtuals: true,
+    getters: true,
   },
+  toObject: {
+    virtuals: true,
+    getters: true,
+  },
+});
+
+userSchema.virtual('isActive').get( function() {
+  const {socketService} = require('./../services');
+  return socketService.isActive(this._id);
 });
 
 const User = mongoose.model(

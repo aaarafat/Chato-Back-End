@@ -25,6 +25,13 @@ exports.sendFriendRequest = async (to, from) => {
     throw new AppError('Cannot send a friend request', 400);
   }
 
+  const userExists = await User.exists({_id: to});
+
+  // user is not found
+  if (!userExists) {
+    throw new AppError('User is not found', 404);
+  }
+
   // create FriendRequest document
   request = await FriendRequest.create({
     to,

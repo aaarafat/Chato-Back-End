@@ -8,14 +8,8 @@ exports.authenticate = async (req, res, next) => {
       message: 'Access Denied No Token Provided',
     });
   }
-  try {
-    req.user = await authService.verifyToken(token);
-  } catch {
-    return res.status(401).json({
-      status: 401,
-      message: 'Access Denied Invalid Token',
-    });
-  }
+
+  req.user = await authService.verifyToken(token);
 
   // check if user still exists
   const user = await userService.getUserById(req.user._id);

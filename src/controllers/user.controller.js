@@ -7,14 +7,7 @@ exports.getAllUsers = async (req, res) => {
 };
 
 exports.registerUser = async (req, res) => {
-  let user = await userService.getUserByEmail(req.body.email);
-  if (user) {
-    return res.status(400).json({
-      status: 400, message: 'This email is already registered ',
-    });
-  }
-
-  user = _.pick(req.body, ['name', 'email', 'password', 'username']);
+  let user = _.pick(req.body, ['name', 'email', 'password', 'username']);
   user = await userService.createUser(user);
 
   // generate token
@@ -28,7 +21,7 @@ exports.registerUser = async (req, res) => {
   res.setHeader('x-auth-token', token);
 
   res.status(200).json({
-    'user': _.pick(user, ['_id', 'name', 'email', 'username', 'profilePic']),
+    'user': _.omit(user.toObject(), ['password', 'friends']),
     'token': token,
   });
 };
@@ -45,7 +38,8 @@ exports.getUserById = async (req, res) => {
     });
   }
 
-  res.status(200).json({user});
+  res.status(200).json({
+    'user': _.omit(user.toObject(), ['password', 'friends'])});
 };
 
 
@@ -84,7 +78,7 @@ exports.changePassword = async (req, res) => {
   res.setHeader('x-auth-token', token);
 
   res.status(200).json({
-    'user': _.pick(user, ['_id', 'name', 'email', 'username', 'profilePic']),
+    'user': _.omit(user.toObject(), ['password', 'friends']),
     'token': token,
   });
 };

@@ -1,5 +1,4 @@
 const {User} = require('../models');
-const _ = require('lodash');
 const authService = require('./auth.service');
 
 exports.getUserByEmail = async (email) => {
@@ -13,7 +12,7 @@ exports.createUser = async (user) => {
   });
   userDoc.password = await authService.hashPassword(user.password);
   await userDoc.save();
-  return _.pick(userDoc, ['_id', 'name', 'email']);
+  return userDoc;
 };
 
 exports.getAllUsers = async () => {
@@ -79,4 +78,25 @@ exports.changePassword = async (user, newPassword) => {
   user.password = await authService.hashPassword(newPassword);
   await user.save();
   return user;
+};
+
+
+/**
+ * Get user's friends by `name`
+ *
+ * @function
+ * @public
+ * @async
+ * @author Abdelrahman Tarek
+ * @param {String} id
+ * @param {String} name - Friend name
+ * @param {Number} limit
+ * @param {Number} offset
+ * @summary Get user's friends by `name`
+ * @return {Array<Document>} `users`
+ */
+exports.getFriends = async (id, name, limit, offset) => {
+  return await User.findById({
+    'name': {'$regex': name, '$options': 'i'},
+  });
 };
