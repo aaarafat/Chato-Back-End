@@ -9,11 +9,11 @@ exports.userSearch = async (req, res) => {
   res.status(200).json({users});
 };
 
-exports.friendsSearch = async (req, res) => {
+exports.friendSearch = async (req, res) => {
   const user = req.user;
   const {q, limit, offset} = req.query;
 
   const friends = await userService.getFriends(user._id, q, limit, offset);
 
-  res.status(200).json({friends});
+  res.status(200).json({'friends': friends.friends});
 };

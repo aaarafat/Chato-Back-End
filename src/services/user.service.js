@@ -96,7 +96,10 @@ exports.changePassword = async (user, newPassword) => {
  * @return {Array<Document>} `users`
  */
 exports.getFriends = async (id, name, limit, offset) => {
-  return await User.findById({
-    'name': {'$regex': name, '$options': 'i'},
-  });
+  return await User.findById(id).select('friends')
+    .populate({
+      path: 'friends',
+      match: {'name': RegExp(name, 'i')},
+      select: '-friends',
+    });
 };
