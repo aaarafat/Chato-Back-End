@@ -2,7 +2,7 @@ const express = require('express');
 const auth = require('../../middlewares/auth');
 const validate = require('../../middlewares/validate');
 const {friendshipValidation} = require('../../validations/');
-const {friendshipController} = require('../../controllers');
+const {friendshipController, userController} = require('../../controllers');
 const catchAsync = require('../../utils/catchAsync');
 
 const router = new express.Router();
@@ -15,6 +15,13 @@ router
   .get(
     validate(friendshipValidation.getFriendRequests),
     catchAsync(friendshipController.getFriendRequests),
+  );
+
+router
+  .route('/profilePic')
+  .post(
+    userController.uploadImage,
+    catchAsync(userController.updateProfilePic),
   );
 
 module.exports = router;

@@ -1,4 +1,5 @@
 const {User} = require('../models');
+const fs = require('fs').promises;
 const authService = require('./auth.service');
 
 exports.getUserByEmail = async (email) => {
@@ -104,4 +105,22 @@ exports.getFriends = async (id, name, limit, offset) => {
       match: {'name': RegExp(name, 'i')},
       select: '-friends',
     });
+};
+
+exports.updateProfilePic = async (user, imagePath) => {
+  // if user has profilePic delete it
+  if (user.profilePic) {
+    console.log(user.profilePic);
+    const oldPath = user.profilePic.match(/[\w-]+.(jpg|png|jpeg)/g);
+    const promisesArray = oldPath.map((path) => {
+      return fs.unlink(`uploads/users/${path}`);
+    });
+
+    Promise.all(promisesArray).catch((err) => {});
+  }
+
+  // set new profilePic
+  user.profilePic = imagePath;
+
+  return await user.save();
 };

@@ -38,6 +38,10 @@ app.use(
   }),
 );
 
+// set uploads folder as static
+const path = require('path');
+app.use('/api/uploads', express.static(path.join(__dirname, '..', 'uploads')));
+
 // sanitize request data
 app.use(xss());
 app.use(mongoSanitize());
@@ -47,7 +51,7 @@ app.use(compression());
 
 // enable cors
 const corsOptions = {
-  exposedHeaders: ['x-auth-token'],
+  exposedHeaders: ['x-auth-token', 'auth-token'],
   origin: '*',
   credentials: true,
   methods: ['GET', 'POST', 'PATCH', 'PUT', 'DELETE', 'OPTIONS'],

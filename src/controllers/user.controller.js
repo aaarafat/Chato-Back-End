@@ -1,5 +1,53 @@
 const {userService, authService} = require('../services');
+const AppError = require('./../utils/AppError');
 const _ = require('lodash');
+const multer = require('multer');
+
+const multerStorage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, 'uploads/users');
+  },
+  filename: (req, file, cb) => {
+    const ext = file.mimetype.split('/')[1];
+    cb(null, `${req.user.username}_${req.user._id}_${Date.now()}.${ext}`);
+  },
+});
+
+const multerFilter = (req, file, cb) => {
+  if (file.mimetype.split('/')[1].match(/(png|jpg|jpeg)/)) {
+    cb(null, true);
+  } else {
+    cb(
+      new AppError(
+        'Not an image! Please upload only images',
+        404,
+      ),
+      false,
+    );
+  }
+};
+
+const upload = multer({
+  storage: multerStorage,
+  fileFilter: multerFilter,
+});
+
+exports.uploadImage = upload.single('image');
+
+exports.updateProfilePic = async (req, res) => {
+  // if no image file in request throw error
+  if (!req.file) {
+    throw new AppError('Please Upload a file!', 400);
+  }
+
+  // update profilePic
+  const user = await userService.updateProfilePic(
+    req.user,
+    req.file.path,
+  );
+
+  res.status(200).json({user});
+};
 
 exports.getAllUsers = async (req, res) => {
   const users = await userService.getAllUsers();
