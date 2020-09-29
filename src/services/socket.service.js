@@ -29,7 +29,7 @@ exports.notifyFriendRequest = (userId, request) => {
 };
 
 exports.handleConnection = (socket) => {
-  logger.info(`Hello socket ${socket.id}...`);
+  logger.debug(`Hello socket ${socket.id}...`);
 
   activeSockets[socket.id] = socket;
   userSocket[socket.user._id] = socket.id;
@@ -37,7 +37,7 @@ exports.handleConnection = (socket) => {
 
 exports.handleDisconnection = (socket) => {
   socket.on('disconnect', () => {
-    logger.info(`${socket.id} Disconnected ....`);
+    logger.debug(`${socket.id} Disconnected ....`);
 
     delete activeSockets[socket.id];
   });
