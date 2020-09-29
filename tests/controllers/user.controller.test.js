@@ -37,6 +37,8 @@ describe('User Controller', () => {
 
     it('should return user if valid', async () => {
       await userController.getUserById(req, res);
+      user = user.toObject();
+      user.friends = undefined;
       expect(res.json.mock.calls[0][0].user).toEqual(user);
     });
   });

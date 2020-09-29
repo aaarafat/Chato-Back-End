@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const {isActive} = require('./../services/socket.service');
 
 const userSchema = new mongoose.Schema({
   name: {
@@ -50,8 +51,7 @@ const userSchema = new mongoose.Schema({
 });
 
 userSchema.virtual('isActive').get( function() {
-  const {socketService} = require('./../services');
-  return socketService.isActive(this._id);
+  return isActive(this._id);
 });
 
 const User = mongoose.model(

@@ -10,6 +10,7 @@ const router = new express.Router();
 router
   .route('/users')
   .get(
+    catchAsync(auth.authenticate),
     catchAsync(validate(searchValidation.search)),
     catchAsync(searchController.userSearch),
   );

@@ -49,15 +49,17 @@ exports.getUserById = async (userId, ops = {password: false}) => {
  * @public
  * @async
  * @author Abdelrahman Tarek
+ * @param {Array<String>} friends
  * @param {String} name - User name
  * @param {Number} limit
  * @param {Number} offset
  * @summary Get user by `name`
  * @return {Array<Document>} `users`
  */
-exports.getUsersByName = async (name, limit, offset) => {
+exports.getUsersByName = async (friends, name, limit, offset) => {
   return await User.find({
     'name': {'$regex': name, '$options': 'i'},
+    '_id': {$nin: friends},
   }).limit(limit).skip(offset);
 };
 

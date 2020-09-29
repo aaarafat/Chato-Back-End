@@ -12,7 +12,10 @@ describe('Search Controller', () => {
       userService.getUsersByName = jest.fn()
         .mockImplementationOnce(() => [user]);
       res = requestMock.mockResponse();
-      req = {query: {q: 'f', limit: 10, offset: 1}};
+      req = {
+        query: {q: 'f', limit: 10, offset: 1},
+        user: user,
+      };
     });
 
     it('should call getUsersByName service', async () => {
@@ -23,7 +26,9 @@ describe('Search Controller', () => {
     it('should call getUsersByName service with q limit offset', async () => {
       await searchController.userSearch(req, res);
       expect(userService.getUsersByName)
-        .toHaveBeenCalledWith(req.query.q, req.query.limit, req.query.offset);
+        .toHaveBeenCalledWith(
+          req.user.friends, req.query.q, req.query.limit, req.query.offset,
+        );
     });
 
     it('should return 200 if valid', async () => {

@@ -1,10 +1,10 @@
 const {userService} = require('../services');
 
 exports.userSearch = async (req, res) => {
-  const name = req.query.q;
-  const {limit, offset} = req.query;
+  const user = req.user;
+  const {q, limit, offset} = req.query;
 
-  const users = await userService.getUsersByName(name, limit, offset);
+  const users = await userService.getUsersByName(user.friends, q, limit, offset);
 
   res.status(200).json({users});
 };
