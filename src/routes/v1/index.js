@@ -5,6 +5,7 @@ const authRouter = require('./auth.route');
 const searchRouter = require('./search.route');
 const meRouter = require('./me.route');
 const friendRequestRouter = require('./friendRequest.route');
+const conversationRouter = require('./conversation.route');
 
 const router = new express.Router();
 
@@ -13,5 +14,6 @@ router.use('/auth', authRouter);
 router.use('/search', searchRouter);
 router.use('/me', meRouter);
 router.use('/friend_requests', friendRequestRouter);
+router.use('/conversations', conversationRouter);
 
 module.exports = router;

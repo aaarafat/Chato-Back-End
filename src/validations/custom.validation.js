@@ -14,3 +14,19 @@ exports.idCheck = (value, helpers) => {
   }
   return value;
 };
+
+
+exports.idsArray = () => {
+  return function(values, helpers) {
+    try {
+      values.forEach((v) => {
+        if (!mongoose.Types.ObjectId.isValid(v)) {
+          throw helpers.message(v + ' is not a valid Id');
+        }
+      });
+    } catch (err) {
+      return err;
+    }
+    return values;
+  };
+};

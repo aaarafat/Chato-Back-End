@@ -38,11 +38,8 @@ const groupConversationSchema = new mongoose.Schema({
 
 const Conversation = mongoose.model('Conversation', conversationSchema);
 
-const PrivateConversation = Conversation.discriminator('private', null);
-
 const GroupConversation = Conversation
-  .discriminator('private', groupConversationSchema);
+  .discriminator('group', groupConversationSchema);
 
 exports.Conversation = Conversation;
-exports.PrivateConversation = PrivateConversation;
 exports.GroupConversation = GroupConversation;
