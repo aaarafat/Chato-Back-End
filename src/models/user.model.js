@@ -1,3 +1,4 @@
+const {trim} = require('lodash');
 const mongoose = require('mongoose');
 const {isActive} = require('./../services/socket.service');
 
@@ -8,6 +9,7 @@ const userSchema = new mongoose.Schema({
     minlength: 5,
     maxlength: 50,
     index: true,
+    trim: true,
   },
   username: {
     type: String,
@@ -15,6 +17,7 @@ const userSchema = new mongoose.Schema({
     minlength: 5,
     maxlength: 50,
     unique: true,
+    trim: true,
   },
   email: {
     type: String,
@@ -22,6 +25,7 @@ const userSchema = new mongoose.Schema({
     minlength: 6,
     maxlength: 255,
     unique: true,
+    trim: true,
   },
   password: {
     type: String,
