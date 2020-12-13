@@ -46,7 +46,7 @@ removeConversationFromUsers = async (userIds, conversationId) => {
  * @param {Array<string>} members Members IDs
  * @return {Document} conversation
  */
-exports.createGroupConversation = async (adminId, members) => {
+createGroupConversation = async (adminId, members) => {
   members = [...members, adminId];
 
   const conversation = await GroupConversation.create({
@@ -70,7 +70,7 @@ exports.createGroupConversation = async (adminId, members) => {
  * @param {String} groupId Group Conversation ID to be deleted
  * @returns {Document} Deleted conversation
  */
-exports.deleteGroupConversationById = async (groupId) => {
+deleteGroupConversationById = async (groupId) => {
   const conversation = await GroupConversation.findByIdAndDelete(groupId);
 
   // remove conversation from all memebers
@@ -79,4 +79,40 @@ exports.deleteGroupConversationById = async (groupId) => {
   ]);
 
   return conversation;
+};
+
+/**
+ * Get Conversation By ID
+ *
+ * @function
+ * @public
+ * @async
+ * @author Abdelrahman Tarek
+ * @param {String} conversationId conversation ID
+ * @returns {Document} conversation
+ */
+getConversationById = async (conversationId) => {
+  const conversation = await Conversation.findById(conversationId);
+  return conversation;
+};
+
+/**
+ * Get Conversations By IDs
+ *
+ * @function
+ * @public
+ * @async
+ * @author Abdelrahman Tarek
+ * @param {Array<String>} conversationIDs
+ * @returns {Array<Document>} conversations
+ */
+getConversationsByIDs = async (conversationIDs) => {
+  return await Promise.all([...conversationIDs.map(getConversationById)]);
+};
+
+module.exports = {
+  getConversationsByIDs,
+  getConversationById,
+  deleteGroupConversationById,
+  createGroupConversation,
 };
