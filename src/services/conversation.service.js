@@ -21,3 +21,19 @@ exports.createGroupConversation = async (adminId, members) => {
 
   return await conversation;
 };
+
+/** 
+ * Delete Group Conversation By ID
+ * 
+ * @function
+ * @public
+ * @async
+ * @author Abdelrahman Tarek
+ * @param {String} groupId Group Conversation ID to be deleted
+ * @returns {Document} Deleted conversation
+ */
+exports.deleteGroupConversationById = async (groupId) => {
+  const res = await GroupConversation.findByIdAndDelete(groupId);
+
+  return res;
+};

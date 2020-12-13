@@ -12,3 +12,13 @@ exports.createGroupConversation = async (req, res) => {
 
   res.status(200).json({conversation});
 };
+
+
+exports.deleteGroupConversation = async (req, res) => {
+  const groupId = req.params.id;
+
+  // delete Group Conversation
+  await conversationService
+    .deleteGroupConversationById(groupId);
+  res.status(204).send();
+};
