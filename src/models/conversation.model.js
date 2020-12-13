@@ -1,25 +1,35 @@
+const { date } = require('@hapi/joi');
 const mongoose = require('mongoose');
 
-const conversationSchema = new mongoose.Schema({
-  members: [{
-    type: mongoose.Types.ObjectId,
-    ref: 'User',
-  }],
-  nicknames: {
-    type: Map,
-    of: String,
+const conversationSchema = new mongoose.Schema(
+  {
+    members: [
+      {
+        type: mongoose.Types.ObjectId,
+        ref: 'User',
+      },
+    ],
+    nicknames: {
+      type: Map,
+      of: String,
+    },
+    timestamp: {
+      type: Date,
+      index: true,
+    },
   },
-}, {
-  toJSON: {
-    virtuals: true,
-    getters: true,
-  },
-  toObject: {
-    virtuals: true,
-    getters: true,
-  },
-  discriminatorKey: 'type',
-});
+  {
+    toJSON: {
+      virtuals: true,
+      getters: true,
+    },
+    toObject: {
+      virtuals: true,
+      getters: true,
+    },
+    discriminatorKey: 'type',
+  }
+);
 
 const groupConversationSchema = new mongoose.Schema({
   name: {
@@ -30,16 +40,20 @@ const groupConversationSchema = new mongoose.Schema({
   photo: {
     type: String,
   },
-  admins: [{
-    type: mongoose.Types.ObjectId,
-    ref: 'User',
-  }],
+  admins: [
+    {
+      type: mongoose.Types.ObjectId,
+      ref: 'User',
+    },
+  ],
 });
 
 const Conversation = mongoose.model('Conversation', conversationSchema);
 
-const GroupConversation = Conversation
-  .discriminator('group', groupConversationSchema);
+const GroupConversation = Conversation.discriminator(
+  'group',
+  groupConversationSchema
+);
 
 exports.Conversation = Conversation;
 exports.GroupConversation = GroupConversation;

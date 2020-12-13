@@ -1,14 +1,13 @@
-const {GroupConversation} = require('../models');
+const { GroupConversation } = require('../models');
 
 exports.isGroupAdmin = async (req, res, next) => {
   const userId = req.user._id;
   const conversationId = req.params.id;
 
   // check if there is a conversation with the given id
-  const conversation = await GroupConversation
-    .findById(conversationId);
+  const conversation = await GroupConversation.findById(conversationId);
 
-  if(!conversation) {
+  if (!conversation) {
     // conversation is not found
     return res.status(404).json({
       status: 404,

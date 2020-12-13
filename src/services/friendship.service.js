@@ -1,4 +1,4 @@
-const {FriendRequest, User} = require('../models');
+const { FriendRequest, User } = require('../models');
 const socketService = require('../services/socket.service');
 const AppError = require('../utils/AppError');
 
@@ -16,8 +16,10 @@ const AppError = require('../utils/AppError');
  */
 exports.sendFriendRequest = async (to, from) => {
   // check if you sent a request
-  let request = await FriendRequest
-    .findOne({to: {$in: [to, from]}, from: {$in: [to, from]}});
+  let request = await FriendRequest.findOne({
+    to: { $in: [to, from] },
+    from: { $in: [to, from] },
+  });
   // console.log(request);
 
   // request is found
@@ -25,7 +27,7 @@ exports.sendFriendRequest = async (to, from) => {
     throw new AppError('Cannot send a friend request', 400);
   }
 
-  const userExists = await User.exists({_id: to});
+  const userExists = await User.exists({ _id: to });
 
   // user is not found
   if (!userExists) {
@@ -53,7 +55,7 @@ exports.sendFriendRequest = async (to, from) => {
  * @return {Array<Document>} Requests
  */
 exports.getFriendRequests = async (userId, limit, offset) => {
-  const requests = await FriendRequest.find({to: userId})
+  const requests = await FriendRequest.find({ to: userId })
     .select('-to')
     .limit(limit)
     .skip(offset)
@@ -62,7 +64,6 @@ exports.getFriendRequests = async (userId, limit, offset) => {
   return requests;
 };
 
-
 exports.acceptFriendRequest = async (requestId) => {
   const request = await FriendRequest.findById(requestId);
 
@@ -70,8 +71,12 @@ exports.acceptFriendRequest = async (requestId) => {
   if (!request) throw new AppError('The Request is not found', 404);
 
   await Promise.all([
-    User.findByIdAndUpdate(request.to, {$addToSet: {friends: request.from}}),
-    User.findByIdAndUpdate(request.from, {$addToSet: {friends: request.to}}),
+    User.findByIdAndUpdate(request.to, {
+      $addToSet: { friends: request.from },
+    }),
+    User.findByIdAndUpdate(request.from, {
+      $addToSet: { friends: request.to },
+    }),
     request.remove(),
   ]);
 };

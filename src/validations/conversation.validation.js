@@ -1,5 +1,5 @@
-const Joi = require('@hapi/joi');
-const {idsArray, idCheck} = require('./custom.validation');
+const Joi = require("@hapi/joi");
+const { idsArray, idCheck } = require("./custom.validation");
 
 exports.createConversation = {
   body: Joi.object().keys({
@@ -21,5 +21,12 @@ exports.createConversation = {
 exports.conversationId = {
   params: Joi.object().keys({
     id: Joi.required().custom(idCheck),
+  }),
+};
+
+exports.getConversations = {
+  query: Joi.object().keys({
+    limit: Joi.number().default(20).min(1).max(50),
+    offset: Joi.number().default(0).min(0),
   }),
 };

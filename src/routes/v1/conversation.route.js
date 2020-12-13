@@ -3,27 +3,31 @@ const auth = require('../../middlewares/auth');
 const conversationMiddleware = require('../../middlewares/conversation');
 const validate = require('../../middlewares/validate');
 const catchAsync = require('../../utils/catchAsync');
-const {conversationController} = require('../../controllers');
-const {conversationValidation} = require('../../validations');
+const { conversationController } = require('../../controllers');
+const { conversationValidation } = require('../../validations');
 
 const router = new express.Router();
-
 
 router
   .route('/')
   .post(
     catchAsync(auth.authenticate),
     catchAsync(validate(conversationValidation.createConversation)),
-    catchAsync(conversationController.createGroupConversation),
+    catchAsync(conversationController.createGroupConversation)
   );
 
 router
-    .route('/:id')
-    .delete(
-      catchAsync(auth.authenticate),
-      catchAsync(validate(conversationValidation.conversationId)),
-      catchAsync(conversationMiddleware.isGroupAdmin),
-      catchAsync(conversationController.deleteGroupConversation)
-    );
+  .route('/:id')
+  .delete(
+    catchAsync(auth.authenticate),
+    catchAsync(validate(conversationValidation.conversationId)),
+    catchAsync(conversationMiddleware.isGroupAdmin),
+    catchAsync(conversationController.deleteGroupConversation)
+  )
+  .get(
+    catchAsync(auth.authenticate),
+    catchAsync(validate(conversationValidation.conversationId)),
+    catchAsync(conversationController.getConversationById)
+  );
 
 module.exports = router;
