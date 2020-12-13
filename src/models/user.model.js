@@ -1,5 +1,5 @@
-const mongoose = require("mongoose");
-const { isActive } = require("./../services/socket.service");
+const mongoose = require('mongoose');
+const { isActive } = require('./../services/socket.service');
 
 const userSchema = new mongoose.Schema(
   {
@@ -40,14 +40,14 @@ const userSchema = new mongoose.Schema(
     friends: [
       {
         type: mongoose.Types.ObjectId,
-        ref: "User",
+        ref: 'User',
       },
     ],
     isAdmin: Boolean,
     conversations: [
       {
         type: mongoose.Types.ObjectId,
-        ref: "Conversation",
+        ref: 'Conversation',
       },
     ],
   },
@@ -64,10 +64,10 @@ const userSchema = new mongoose.Schema(
   }
 );
 
-userSchema.virtual("isActive").get(function () {
+userSchema.virtual('isActive').get(function () {
   return isActive(this._id);
 });
 
-const User = mongoose.model("User", userSchema);
+const User = mongoose.model('User', userSchema);
 
 exports.User = User;

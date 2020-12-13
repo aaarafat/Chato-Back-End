@@ -1,9 +1,9 @@
-const {User} = require('../models');
+const { User } = require('../models');
 const fs = require('fs').promises;
 const authService = require('./auth.service');
 
 exports.getUserByEmail = async (email) => {
-  return await User.findOne({email}).select('+password');
+  return await User.findOne({ email }).select('+password');
 };
 
 exports.createUser = async (user) => {
@@ -34,14 +34,13 @@ exports.getAllUsers = async () => {
  * @return {Document} `user` if user is found
  * @return {null} `null` if user is not found
  */
-exports.getUserById = async (userId, ops = {password: false}) => {
+exports.getUserById = async (userId, ops = { password: false }) => {
   if (ops.password) {
     return await User.findById(userId).select('+password');
   } else {
     return await User.findById(userId);
   }
 };
-
 
 /**
  * Get users by `name`
@@ -59,11 +58,12 @@ exports.getUserById = async (userId, ops = {password: false}) => {
  */
 exports.getUsersByName = async (friends, name, limit, offset) => {
   return await User.find({
-    'name': {'$regex': name, '$options': 'i'},
-    '_id': {$nin: friends},
-  }).limit(limit).skip(offset);
+    name: { $regex: name, $options: 'i' },
+    _id: { $nin: friends },
+  })
+    .limit(limit)
+    .skip(offset);
 };
-
 
 /**
  * Change user password
@@ -83,7 +83,6 @@ exports.changePassword = async (user, newPassword) => {
   return user;
 };
 
-
 /**
  * Get user's friends by `name`
  *
@@ -99,10 +98,11 @@ exports.changePassword = async (user, newPassword) => {
  * @return {Array<Document>} `users`
  */
 exports.getFriends = async (id, name, limit, offset) => {
-  return await User.findById(id).select('friends')
+  return await User.findById(id)
+    .select('friends')
     .populate({
       path: 'friends',
-      match: {'name': RegExp(name, 'i')},
+      match: { name: RegExp(name, 'i') },
       select: '-friends',
     });
 };

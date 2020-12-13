@@ -1,4 +1,4 @@
-const { conversationService } = require("../services");
+const { conversationService } = require('../services');
 
 exports.createGroupConversation = async (req, res) => {
   // get creator (admin) user
@@ -26,13 +26,29 @@ exports.deleteGroupConversation = async (req, res) => {
 exports.getConversations = async (req, res) => {
   const user = req.user;
 
+  const { limit, offset } = req.query;
+
   const conversationIDs = user.conversations;
 
   const conversations = await conversationService.getConversationsByIDs(
-    conversationIDs
+    conversationIDs,
+    limit,
+    offset
   );
 
   res.status(200).json({
     conversations,
+  });
+};
+
+exports.getConversationById = async (req, res) => {
+  const conversationId = req.params.id;
+
+  const conversation = await conversationService.getConversationById(
+    conversationId
+  );
+
+  res.status(200).json({
+    conversation,
   });
 };

@@ -1,5 +1,5 @@
-const { GroupConversation, User } = require("../models");
-const { Conversation } = require("../models/conversation.model");
+const { GroupConversation, User, Conversation } = require('../models');
+const { conversationId } = require('../validations/conversation.validation');
 
 /**
  * Add conversationId to users
@@ -52,6 +52,7 @@ createGroupConversation = async (adminId, members) => {
   const conversation = await GroupConversation.create({
     members: members,
     admins: [adminId],
+    timestamp: Date.now(),
   });
 
   // add conversation to all memebers
@@ -93,6 +94,7 @@ deleteGroupConversationById = async (groupId) => {
  */
 getConversationById = async (conversationId) => {
   const conversation = await Conversation.findById(conversationId);
+
   return conversation;
 };
 
@@ -104,10 +106,19 @@ getConversationById = async (conversationId) => {
  * @async
  * @author Abdelrahman Tarek
  * @param {Array<String>} conversationIDs
+ * @param {Number} limit
+ * @param {Number} offset
  * @returns {Array<Document>} conversations
  */
-getConversationsByIDs = async (conversationIDs) => {
-  return await Promise.all([...conversationIDs.map(getConversationById)]);
+getConversationsByIDs = async (conversationIDs, limit, offset) => {
+  const conversations = await Conversation.find({
+    _id: { $in: conversationIDs },
+  })
+    .sort({ timestamp: -1 })
+    .limit(limit)
+    .skip(offset);
+
+  return conversations;
 };
 
 module.exports = {
