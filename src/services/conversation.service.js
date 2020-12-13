@@ -1,6 +1,39 @@
-const {
-  GroupConversation,
-} = require('../models');
+const { GroupConversation, User } = require("../models");
+const { Conversation } = require("../models/conversation.model");
+
+/**
+ * Add conversationId to users
+ *
+ * @function
+ * @private
+ * @async
+ * @author Abdelrahman Tarek
+ * @param {Array<String>} userIds user IDs array
+ * @param {String} conversationId conversation ID
+ */
+addConversationToUsers = async (userIds, conversationId) => {
+  return await User.updateMany(
+    { _id: { $in: userIds } },
+    { $addToSet: { conversations: conversationId } }
+  );
+};
+
+/**
+ * Remove conversationId from users
+ *
+ * @function
+ * @private
+ * @async
+ * @author Abdelrahman Tarek
+ * @param {Array<String>} userIds user IDs array
+ * @param {String} conversationId conversation ID
+ */
+removeConversationFromUsers = async (userIds, conversationId) => {
+  return await User.updateMany(
+    { _id: { $in: userIds } },
+    { $pull: { conversations: conversationId } }
+  );
+};
 
 /**
  * Create Group Conversation
@@ -14,17 +47,22 @@ const {
  * @return {Document} conversation
  */
 exports.createGroupConversation = async (adminId, members) => {
-  const conversation = GroupConversation.create({
-    members: [...members, adminId],
+  members = [...members, adminId];
+
+  const conversation = await GroupConversation.create({
+    members: members,
     admins: [adminId],
   });
 
-  return await conversation;
+  // add conversation to all memebers
+  Promise.all([addConversationToUsers(members, conversation._id)]);
+
+  return conversation;
 };
 
-/** 
+/**
  * Delete Group Conversation By ID
- * 
+ *
  * @function
  * @public
  * @async
@@ -33,7 +71,12 @@ exports.createGroupConversation = async (adminId, members) => {
  * @returns {Document} Deleted conversation
  */
 exports.deleteGroupConversationById = async (groupId) => {
-  const res = await GroupConversation.findByIdAndDelete(groupId);
+  const conversation = await GroupConversation.findByIdAndDelete(groupId);
 
-  return res;
+  // remove conversation from all memebers
+  Promise.all([
+    removeConversationFromUsers(conversation.members, conversation._id),
+  ]);
+
+  return conversation;
 };

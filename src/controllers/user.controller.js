@@ -2,6 +2,7 @@ const { userService, authService } = require("../services");
 const AppError = require("./../utils/AppError");
 const multer = require("multer");
 const { formatUser } = require("../utils/format");
+const _ = require("lodash");
 
 const multerStorage = multer.diskStorage({
   destination: (req, file, cb) => {
