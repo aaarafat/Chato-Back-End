@@ -1,23 +1,23 @@
-const {authService, userService} = require('../services');
-const _ = require('lodash');
+const { authService, userService } = require("../services");
+const { formatUser } = require("../utils/format");
 
 exports.loginUser = async (req, res) => {
   const user = await userService.getUserByEmail(req.body.email);
   if (!user) {
     return res.status(400).json({
       status: 400,
-      message: 'Invalid Email or Password',
+      message: "Invalid Email or Password",
     });
   }
 
   const valid = await authService.verifyPassword(
     req.body.password,
-    user.password,
+    user.password
   );
   if (!valid) {
     return res.status(400).json({
       status: 400,
-      message: 'Invalid Email or Password',
+      message: "Invalid Email or Password",
     });
   }
 
@@ -29,10 +29,10 @@ exports.loginUser = async (req, res) => {
 
   const token = await authService.generateToken(tokenPayload);
   // send user and token
-  res.setHeader('x-auth-token', token);
+  res.setHeader("x-auth-token", token);
 
   res.status(200).json({
-    'user': _.omit(user.toObject(), ['password', 'friends']),
-    'token': token,
+    user: formatUser(user),
+    token: token,
   });
 };

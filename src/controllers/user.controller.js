@@ -1,29 +1,23 @@
-const {userService, authService} = require('../services');
-const AppError = require('./../utils/AppError');
-const _ = require('lodash');
-const multer = require('multer');
+const { userService, authService } = require("../services");
+const AppError = require("./../utils/AppError");
+const multer = require("multer");
+const { formatUser } = require("../utils/format");
 
 const multerStorage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, 'uploads/users');
+    cb(null, "uploads/users");
   },
   filename: (req, file, cb) => {
-    const ext = file.mimetype.split('/')[1];
+    const ext = file.mimetype.split("/")[1];
     cb(null, `${req.user.username}_${req.user._id}_${Date.now()}.${ext}`);
   },
 });
 
 const multerFilter = (req, file, cb) => {
-  if (file.mimetype.split('/')[1].match(/(png|jpg|jpeg)/)) {
+  if (file.mimetype.split("/")[1].match(/(png|jpg|jpeg)/)) {
     cb(null, true);
   } else {
-    cb(
-      new AppError(
-        'Not an image! Please upload only images',
-        404,
-      ),
-      false,
-    );
+    cb(new AppError("Not an image! Please upload only images", 404), false);
   }
 };
 
@@ -32,30 +26,27 @@ const upload = multer({
   fileFilter: multerFilter,
 });
 
-exports.uploadImage = upload.single('image');
+exports.uploadImage = upload.single("image");
 
 exports.updateProfilePic = async (req, res) => {
   // if no image file in request throw error
   if (!req.file) {
-    throw new AppError('Please Upload a file!', 400);
+    throw new AppError("Please Upload a file!", 400);
   }
 
   // update profilePic
-  const user = await userService.updateProfilePic(
-    req.user,
-    req.file.path,
-  );
+  const user = await userService.updateProfilePic(req.user, req.file.path);
 
-  res.status(200).json({user});
+  res.status(200).json({ user: formatUser(user) });
 };
 
 exports.getAllUsers = async (req, res) => {
   const users = await userService.getAllUsers();
-  res.status(200).json({users});
+  res.status(200).json({ users });
 };
 
 exports.registerUser = async (req, res) => {
-  let user = _.pick(req.body, ['name', 'email', 'password', 'username']);
+  let user = _.pick(req.body, ["name", "email", "password", "username"]);
   user = await userService.createUser(user);
 
   // generate token
@@ -66,14 +57,13 @@ exports.registerUser = async (req, res) => {
 
   const token = await authService.generateToken(tokenPayload);
   // send user and token
-  res.setHeader('x-auth-token', token);
+  res.setHeader("x-auth-token", token);
 
   res.status(200).json({
-    'user': _.omit(user.toObject(), ['password', 'friends']),
-    'token': token,
+    user: formatUser(user),
+    token: token,
   });
 };
-
 
 exports.getUserById = async (req, res) => {
   const id = req.params.id;
@@ -82,33 +72,33 @@ exports.getUserById = async (req, res) => {
   // if user = null then user is not found
   if (!user) {
     return res.status(404).json({
-      status: 404, message: 'user is not found',
+      status: 404,
+      message: "user is not found",
     });
   }
 
   res.status(200).json({
-    'user': _.omit(user.toObject(), ['password', 'friends'])});
+    user: formatUser(user),
+  });
 };
 
-
 exports.changePassword = async (req, res) => {
-  const {password, oldPassword} = req.body;
+  const { password, oldPassword } = req.body;
 
-  let user = await userService.getUserById(req.user._id, {password: true});
+  let user = await userService.getUserById(req.user._id, { password: true });
 
   if (!user) {
     return res.status(404).json({
-      status: 404, message: 'user is not found',
+      status: 404,
+      message: "user is not found",
     });
   }
 
-  const valid = await authService.verifyPassword(
-    oldPassword,
-    user.password,
-  );
+  const valid = await authService.verifyPassword(oldPassword, user.password);
   if (!valid) {
     return res.status(400).json({
-      status: 400, message: 'Invalid Password',
+      status: 400,
+      message: "Invalid Password",
     });
   }
 
@@ -123,10 +113,10 @@ exports.changePassword = async (req, res) => {
 
   const token = await authService.generateToken(tokenPayload);
   // send user and token
-  res.setHeader('x-auth-token', token);
+  res.setHeader("x-auth-token", token);
 
   res.status(200).json({
-    'user': _.omit(user.toObject(), ['password', 'friends']),
-    'token': token,
+    user: formatUser(user),
+    token: token,
   });
 };
