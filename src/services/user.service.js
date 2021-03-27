@@ -104,7 +104,7 @@ exports.getFriends = async (id, name, limit, offset) => {
       path: 'friends',
       match: { name: RegExp(name, 'i') },
       select: '-friends',
-    });
+    }).limit(limit).skip(offset);
 };
 
 exports.updateProfilePic = async (user, imagePath) => {

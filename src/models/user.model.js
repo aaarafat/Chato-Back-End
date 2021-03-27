@@ -39,8 +39,15 @@ const userSchema = new mongoose.Schema(
     },
     friends: [
       {
-        type: mongoose.Types.ObjectId,
-        ref: 'User',
+        _id : false,
+        friend : {
+          type: mongoose.Types.ObjectId,
+          ref: 'User',
+        },
+        conversation: {
+          type: mongoose.Types.ObjectId,
+          ref: 'Conversation',
+        }
       },
     ],
     isAdmin: Boolean,

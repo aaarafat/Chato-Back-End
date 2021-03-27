@@ -48,6 +48,13 @@ exports.getConversationById = async (req, res) => {
     conversationId
   );
 
+  if(!conversation || conversation.length === 0) {
+    return res.status(404).json({
+      status: 404, message: 'No Conversation with the given ID',
+    });
+  }
+    
+
   res.status(200).json({
     conversation,
   });
