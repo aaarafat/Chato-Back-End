@@ -1,5 +1,4 @@
 const { GroupConversation, User, Conversation } = require('../models');
-const { conversationId } = require('../validations/conversation.validation');
 
 /**
  * Add conversationId to users
@@ -52,7 +51,27 @@ createGroupConversation = async (adminId, members) => {
   const conversation = await GroupConversation.create({
     members: members,
     admins: [adminId],
-    timestamp: Date.now(),
+  });
+
+  // add conversation to all memebers
+  Promise.all([addConversationToUsers(members, conversation._id)]);
+
+  return conversation;
+};
+
+/**
+ * Create Private Conversation
+ *
+ * @function
+ * @public
+ * @async
+ * @author Abdelrahman Tarek
+ * @param {Array<string>} members Members IDs
+ * @return {Document} conversation
+ */
+createPrivateConversation = async (members) => {
+  const conversation = await Conversation.create({
+    members: members,
   });
 
   // add conversation to all memebers
@@ -114,7 +133,7 @@ getConversationsByIDs = async (conversationIDs, limit, offset) => {
   const conversations = await Conversation.find({
     _id: { $in: conversationIDs },
   })
-    .sort({ timestamp: -1 })
+    .sort({ updatedAt: -1 })
     .limit(limit)
     .skip(offset);
 
@@ -126,4 +145,5 @@ module.exports = {
   getConversationById,
   deleteGroupConversationById,
   createGroupConversation,
+  createPrivateConversation,
 };

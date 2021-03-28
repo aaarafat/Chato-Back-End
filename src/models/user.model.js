@@ -8,7 +8,6 @@ const userSchema = new mongoose.Schema(
       required: true,
       minlength: 5,
       maxlength: 50,
-      index: true,
       trim: true,
     },
     username: {
@@ -39,8 +38,15 @@ const userSchema = new mongoose.Schema(
     },
     friends: [
       {
-        type: mongoose.Types.ObjectId,
-        ref: 'User',
+        _id : false,
+        friend : {
+          type: mongoose.Types.ObjectId,
+          ref: 'User',
+        },
+        conversation: {
+          type: mongoose.Types.ObjectId,
+          ref: 'Conversation',
+        }
       },
     ],
     isAdmin: Boolean,
