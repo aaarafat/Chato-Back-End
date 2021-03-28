@@ -51,7 +51,6 @@ createGroupConversation = async (adminId, members) => {
   const conversation = await GroupConversation.create({
     members: members,
     admins: [adminId],
-    timestamp: Date.now(),
   });
 
   // add conversation to all memebers
@@ -70,10 +69,9 @@ createGroupConversation = async (adminId, members) => {
  * @param {Array<string>} members Members IDs
  * @return {Document} conversation
  */
- createPrivateConversation = async (members) => {
+createPrivateConversation = async (members) => {
   const conversation = await Conversation.create({
     members: members,
-    timestamp: Date.now(),
   });
 
   // add conversation to all memebers
@@ -135,7 +133,7 @@ getConversationsByIDs = async (conversationIDs, limit, offset) => {
   const conversations = await Conversation.find({
     _id: { $in: conversationIDs },
   })
-    .sort({ timestamp: -1 })
+    .sort({ updatedAt: -1 })
     .limit(limit)
     .skip(offset);
 
@@ -147,5 +145,5 @@ module.exports = {
   getConversationById,
   deleteGroupConversationById,
   createGroupConversation,
-  createPrivateConversation
+  createPrivateConversation,
 };

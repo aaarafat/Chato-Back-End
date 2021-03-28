@@ -1,5 +1,5 @@
 const Joi = require('@hapi/joi');
-const {idCheck} = require('./custom.validation');
+const { idCheck } = require('./custom.validation');
 
 /**
  * Schema for FriendRequestId
@@ -17,7 +17,6 @@ exports.FriendRequestId = {
     id: Joi.required().custom(idCheck),
   }),
 };
-
 
 exports.getFriendRequests = {
   query: Joi.object().keys({

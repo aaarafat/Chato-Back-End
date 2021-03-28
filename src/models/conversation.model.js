@@ -1,4 +1,3 @@
-const { date } = require('@hapi/joi');
 const mongoose = require('mongoose');
 
 const conversationSchema = new mongoose.Schema(
@@ -13,12 +12,13 @@ const conversationSchema = new mongoose.Schema(
       type: Map,
       of: String,
     },
-    timestamp: {
-      type: Date,
-      index: true,
+    lastMessage: {
+      type: mongoose.Types.ObjectId,
+      ref: 'Message',
     },
   },
   {
+    timestamps: true,
     toJSON: {
       virtuals: true,
       getters: true,
@@ -47,6 +47,8 @@ const groupConversationSchema = new mongoose.Schema({
     },
   ],
 });
+
+conversationSchema.index({ updatedAt: 1 });
 
 const Conversation = mongoose.model('Conversation', conversationSchema);
 

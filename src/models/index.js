@@ -1,4 +1,5 @@
 const {User} = require('./user.model');
+const {Message} = require('./message.model');
 const {FriendRequest} = require('./friendRequest.model');
 const {
   Conversation,
@@ -9,4 +10,5 @@ module.exports = {
   FriendRequest,
   Conversation,
   GroupConversation,
+  Message
 };

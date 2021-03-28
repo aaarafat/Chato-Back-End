@@ -20,21 +20,21 @@ router.use(catchAsync(auth.authenticate));
 router
   .route('/friend_requests')
   .get(
-    validate(friendshipValidation.getFriendRequests),
+    catchAsync(validate(friendshipValidation.getFriendRequests)),
     catchAsync(friendshipController.getFriendRequests)
   );
 
 router
   .route('/profilePic')
   .post(
-    userController.uploadImage,
+    catchAsync(userController.uploadImage),
     catchAsync(userController.updateProfilePic)
   );
 
 router
   .route('/conversations')
   .get(
-    validate(conversationValidation.getConversations),
+    catchAsync(validate(conversationValidation.getConversations)),
     catchAsync(conversationController.getConversations)
   );
 
