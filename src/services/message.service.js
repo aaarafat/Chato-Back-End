@@ -33,3 +33,24 @@ exports.sendMessage = async (sender, conversationId, message) => {
 
   return newMessage;
 };
+
+/**
+ * Get messages from conversation
+ *
+ * @function
+ * @public
+ * @async
+ * @author Abdelrahman Tarek
+ * @param {String} conversationId conversation ID
+ * @param {Number} limit
+ * @param {Number} offset
+ * @returns {Document | null} message
+ */
+
+exports.getMessages = async (userId, conversationId, limit, offset) => {
+  const messages = await Message.find({ conversation: conversationId })
+    .sort({ createdAt: -1 })
+    .limit(limit)
+    .skip(offset);
+  return messages;
+};

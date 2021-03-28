@@ -30,4 +30,13 @@ router
     catchAsync(conversationController.getConversationById)
   );
 
+router
+  .route('/:id/messages')
+  .get(
+    catchAsync(auth.authenticate),
+    catchAsync(validate(conversationValidation.getConversationMessages)),
+    catchAsync(conversationMiddleware.isConversationMember),
+    catchAsync(conversationController.getConversationMessages)
+  );
+
 module.exports = router;

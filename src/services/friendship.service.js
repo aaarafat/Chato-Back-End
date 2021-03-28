@@ -56,6 +56,7 @@ exports.sendFriendRequest = async (to, from) => {
  */
 exports.getFriendRequests = async (userId, limit, offset) => {
   const requests = await FriendRequest.find({ to: userId })
+    .sort({ createdAt: -1 })
     .select('-to')
     .limit(limit)
     .skip(offset)
@@ -68,17 +69,24 @@ exports.acceptFriendRequest = async (requestId) => {
   const request = await FriendRequest.findById(requestId);
 
   const conversationService = require('./conversation.service.js');
-  const conversation = await conversationService.createPrivateConversation([request.from, request.to]);
+  const conversation = await conversationService.createPrivateConversation([
+    request.from,
+    request.to,
+  ]);
 
   // no request found
   if (!request) throw new AppError('The Request is not found', 404);
 
   await Promise.all([
     User.findByIdAndUpdate(request.to, {
-      $addToSet: { friends: {friend: request.from, conversation: conversation._id} },
+      $addToSet: {
+        friends: { friend: request.from, conversation: conversation._id },
+      },
     }),
     User.findByIdAndUpdate(request.from, {
-      $addToSet: { friends: {friend: request.to, conversation: conversation._id} },
+      $addToSet: {
+        friends: { friend: request.to, conversation: conversation._id },
+      },
     }),
     request.remove(),
   ]);

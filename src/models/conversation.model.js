@@ -48,7 +48,7 @@ const groupConversationSchema = new mongoose.Schema({
   ],
 });
 
-conversationSchema.index({ updatedAt: 1 });
+conversationSchema.index({ updatedAt: -1 });
 
 const Conversation = mongoose.model('Conversation', conversationSchema);
 
