@@ -1,11 +1,15 @@
 {
   "name": "server",
   "version": "1.0.0",
-  "description": "",
+  "description": "CHATO API",
   "main": "server.js",
+  "engines": {
+    "node": "14.x",
+    "npm": "6.x"
+  },
   "scripts": {
-    "start": "cross-env NODE_ENV=development nodemon -L ./src/server.js",
-    "start-prod": "cross-env NODE_ENV=production node ./src/server.js",
+    "start-dev": "cross-env NODE_ENV=development nodemon -L ./src/server.js",
+    "start": "NODE_ENV=production node ./src/server.js",
     "test": "jest --watchAll --verbose --coverage",
     "lint": "eslint ./src/server.js"
   },
