@@ -3,7 +3,7 @@ const config = require('config');
 const jwt = require('jsonwebtoken');
 
 getPrivateKey = () => {
-  return config.get('JWT_KEY');
+  return process.env.JWT_KEY || config.get('JWT_KEY');
 };
 
 exports.verifyPassword = async (password, userPassword) => {
@@ -18,7 +18,7 @@ exports.verifyToken = async (token) => {
 exports.generateToken = async (payload) => {
   const privateKey = getPrivateKey();
   const options = {
-    expiresIn: config.get('JWT_EXPIRES_IN'),
+    expiresIn: process.env.JWT_EXPIRES_IN || config.get('JWT_EXPIRES_IN'),
   };
   return jwt.sign(payload, privateKey, options);
 };

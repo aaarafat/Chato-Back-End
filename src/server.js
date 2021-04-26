@@ -6,9 +6,9 @@ const socketIo = require('./config/socket');
 
 let server;
 const port = process.env.PORT || config.get('PORT') || 3000;
-logger.info(config.get('db'));
+logger.info(process.env.DB || config.get('db'));
 mongoose
-  .connect(config.get('db'), {
+  .connect(process.env.DB || config.get('db'), {
     useNewUrlParser: true,
     useCreateIndex: true,
     useFindAndModify: false,
