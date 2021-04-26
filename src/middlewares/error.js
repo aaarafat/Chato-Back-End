@@ -76,8 +76,8 @@ const handleDuplicateFieldsDB = (err) => {
 const errorHandler = (err, req, res, next) => {
   let { statusCode, message } = err;
   if (
-    process.env.NODE_ENV ||
-    (config.get('NODE_ENV') === 'production' && !err.isOperational)
+    (process.env.NODE_ENV || config.get('NODE_ENV')) === 'production' &&
+    !err.isOperational
   ) {
     statusCode = httpStatus.INTERNAL_SERVER_ERROR;
     message = httpStatus[httpStatus.INTERNAL_SERVER_ERROR];
@@ -88,10 +88,9 @@ const errorHandler = (err, req, res, next) => {
   const response = {
     status: statusCode,
     message,
-    ...(process.env.NODE_ENV ||
-      (config.get('NODE_ENV') === 'development' && {
-        stack: err.stack,
-      })),
+    ...((process.env.NODE_ENV || config.get('NODE_ENV')) === 'development' && {
+      stack: err.stack,
+    }),
   };
 
   if ((process.env.NODE_ENV || config.get('NODE_ENV')) === 'development') {
