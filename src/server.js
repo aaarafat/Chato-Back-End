@@ -5,7 +5,7 @@ const logger = require('./config/logger');
 const socketIo = require('./config/socket');
 
 let server;
-const port = config.get('PORT') || 3000;
+const port = process.env.PORT || config.get('PORT') || 3000;
 logger.info(config.get('db'));
 mongoose
   .connect(config.get('db'), {
