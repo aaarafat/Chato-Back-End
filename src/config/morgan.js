@@ -2,7 +2,7 @@ const morgan = require('morgan');
 const config = require('config');
 const logger = require('./logger');
 
-const nodeEnv = process.env.Node_ENV || config.get('NODE_ENV');
+const nodeEnv = process.env.NODE_ENV || config.get('NODE_ENV');
 morgan.token('message', (req, res) => res.locals.errorMessage || '');
 
 const getIpFormat = () =>
@@ -14,12 +14,12 @@ const errorResponseFormat = `${getIpFormat()} ":method :url HTTP/:http-version" 
 
 const successHandler = morgan(successResponseFormat, {
   skip: (req, res) => res.statusCode >= 400,
-  stream: {write: (message) => logger.info(message.trim())},
+  stream: { write: (message) => logger.info(message.trim()) },
 });
 
 const errorHandler = morgan(errorResponseFormat, {
   skip: (req, res) => res.statusCode < 400,
-  stream: {write: (message) => logger.error(message.trim())},
+  stream: { write: (message) => logger.error(message.trim()) },
 });
 
 module.exports = {
