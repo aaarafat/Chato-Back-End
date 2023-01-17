@@ -1,0 +1,27 @@
+version: '3'
+
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    volumes:
+      - 'logs:/logs'
+      - 'config:/config'
+    ports:
+      - '3001:3001'
+
+  mongodb:
+    image: mongo
+    restart: always
+    container_name: mongodb
+    volumes:
+      - db:/data/db
+    ports:
+      - 27017:27017
+    command: mongod --noauth
+
+volumes:
+  logs:
+  config:
+  db:
