@@ -2,6 +2,7 @@ version: '3'
 
 services:
   backend:
+    image: 'chato-backend'
     build:
       context: .
       dockerfile: ./Dockerfile
@@ -9,7 +10,15 @@ services:
       - 'logs:/logs'
       - 'config:/config'
     ports:
-      - '3001:3001'
+      - '3004:3004'
+
+  frontend:
+    image: 'chato-frontend'
+    volumes:
+      - 'logs:/logs'
+      - 'config:/config'
+    ports:
+      - '3000:3000'
 
   mongodb:
     image: mongo
